@@ -1,5 +1,10 @@
 # webhook-sender
 A program that will allow you send messages to discord through webhooks
+#Requirements
+-You need to have python installed on your device(python 3.11.4 is recommended)
+-You need to have colorama and requests modules installed by using
+`pip install colorama`
+`pip install requests` if not installed
 # How to use
 1.Create a webhook
 
