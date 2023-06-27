@@ -1,68 +1,120 @@
-
 import requests
 import colorama as color
-import json
+import platform
+from os import system
 from time import sleep
-from sys import exit
-
-# Get the webhook url from the user
-with open("config.json" ,"r" ) as f:
-    
-    config = json.load(f)
-if config["url"] == "None":
-    webhook_url = input(color.Fore.CYAN + "Enter the webhook url:")
-else:
-    webhook_url = config["url"]
-
-
-#Get the message from the user
-allowed_url = ["https://ptb.discord.com/api/webhooks/" , "https://discord.com/api/webhooks/" ]
-
-if webhook_url not in webhook_url :
-    color.Fore.RED
-    raise Exception("Not a valid url")
-    
-
-def send_message(url , message): #sends the message
-    
-    try:
-        response = requests.post(url , json=message) #send message
-        print(color.Fore.YELLOW + "Sending...")
-        sleep(1)
-        print(color.Fore.RESET)
-    except:
-        print(color.Fore.RED + "something went wrong")
-        print(color.Fore.RESET) 
-        exit()
-        
-    else:
-        print(color.Fore.GREEN + "You message was sent")
-        print(color.Fore.RESET) 
-
-count = config["times_to_send"]
-
-if count <= 0:
-    raise Exception("No zero or minus numbers allowed")
-    
-    
-
-for num in range(0 , count):
-
-    if config["message"] == "None":
-        message = input(color.Fore.CYAN + "What message do you want to send:")
-    else:
-        message = config["message"]
-    
-    data = {"content": message} # The message
-
-
-    send_message(webhook_url , data)
-
-
-
-
-
    
+def clear(): # Clear 
+    match platform.system():
+        case "Windows":
+            system("cls")
+        case "Linux":
+            system("clear")
 
-    
+def is_webhook_url(webhook_url): # Check if the url is valid and a webhook url indeed
+    allowed_url = ("https://ptb.discord.com/api/webhooks/" , "https://discord.com/api/webhooks/")
+
+    if webhook_url.startswith(allowed_url):
+        return True
+    else:
+        return False
         
+    
+def send_message(url , content): # Function for sending a message
+    data = {"content":content}
+    global response
+    response = requests.post(url=url , json=data)
+
+def chat_as_webhook(): # Function for chat
+    clear()
+    url = input("Enter the webhook url:") # get the webhook
+    if is_webhook_url(url): # if it return true
+        while True: # continue until message is equal to q or quit
+            message = input("Enter your message(Enter 'q' to exit):")
+            match message:
+                case "q":
+                    break
+                case _:
+                    send_message(url=url , content=message) # sends the messsage to discord
+                    
+
+        clear()   
+        main() # after the loop ends will return you to the main menu
+    else:
+        print("Not valid url")
+        sleep(2)
+        chat_as_webhook() # if the function returned false it will do the function again
+
+def spam_webhook():# Spam the webhook
+    clear()
+    url = input("Enter the webhook url:") # get the webhook
+    if is_webhook_url(url):
+        message = input("Enter the message:")
+        count = int(input("How many messages you want to send:"))
+        
+        for num in range(count):
+            send_message(url=url , content=message)
+        print(color.Fore.GREEN + "Completed")
+        sleep(1)
+        clear()
+        main()
+    else:
+        clear()  
+        spam_webhook()
+
+def send_single_message():
+    clear()
+    url = input("Enter the webhook url:") # get the webhook
+    if is_webhook_url(url): # if it return true
+         # continue until message is equal to q 
+        message = input("Enter your message:")
+        send_message(url=url , content=message) # sends the messsage to discord
+        clear()   
+        main() # after the loop ends will return you to the main menu
+    else:
+        print("Not valid url")
+        sleep(2)
+        send_single_message()
+
+def main():# Main Menu
+    print( color.Fore.RED + """
+
+__________________________________________                                   
+|                 .                       |
+|       _     _ .'|                       |
+| /\    \\   //<  |                        |
+| `\\  //\\ //  | |                         |
+|   \`//  \'/   | | .'''-.         _       |
+|    \|   |/    | |/.'''. \      .' |     | 
+|     '         |  /    | |     .   | /   |
+|               | |     | |   .'.'| |//   |
+|               | |     | | .'.'.-'  /    |
+|               | '.    | '..'   \_.'     |
+|               '---'   '---'             |
+|_________________________________________|
+|                                         |
+|1) Chat as a webhook                     |
+|2) Spam a webhook                        |
+|3) Send a single message                 |
+|                                         |
+|_________________________________________|    
+
+    """)
+    global option
+    option = input( color.Fore.RED + "Choose a option:")
+    
+    clear()
+    match option:
+        case "1":
+            chat_as_webhook()
+            clear()
+        case "2":
+            spam_webhook()
+        case "3":
+            send_single_message()
+        case _:
+            print("Not a valid option")
+            sleep(2)
+            main()
+    
+main()
