@@ -77,7 +77,7 @@ def send_single_message():
         send_single_message()
 
 def main():# Main Menu
-    print( color.Fore.RED + """
+    print( color.Fore.BLUE + """
 
 __________________________________________                                   
 |                 .                       |
