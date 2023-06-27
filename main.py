@@ -3,7 +3,9 @@ import colorama as color
 import platform
 from os import system
 from time import sleep
+import datetime as dt
    
+time = dt.datetime.now()
 def clear(): # Clear 
     match platform.system():
         case "Windows":
@@ -27,10 +29,10 @@ def send_message(url , content): # Function for sending a message
 
 def chat_as_webhook(): # Function for chat
     clear()
-    url = input("Enter the webhook url:") # get the webhook
+    url = input(f"[{dt.datetime.now()}] Enter the webhook url:") #get the webhook
     if is_webhook_url(url): # if it return true
         while True: # continue until message is equal to q or quit
-            message = input("Enter your message(Enter 'q' to exit):")
+            message = input(f"[{dt.datetime.now()}] Enter your message(Enter 'q' to exit):")
             match message:
                 case "q":
                     break
@@ -41,16 +43,16 @@ def chat_as_webhook(): # Function for chat
         clear()   
         main() # after the loop ends will return you to the main menu
     else:
-        print("Not valid url")
+        print(f"[{dt.datetime.now()}] Not a valid url")
         sleep(2)
         chat_as_webhook() # if the function returned false it will do the function again
 
 def spam_webhook():# Spam the webhook
     clear()
-    url = input("Enter the webhook url:") # get the webhook
+    url = input(f"[{dt.datetime.now()}] Enter the webhook url:") # get the webhook
     if is_webhook_url(url):
-        message = input("Enter the message:")
-        count = int(input("How many messages you want to send:"))
+        message = input(f"[{dt.datetime.now()}] Enter the message:")
+        count = int(input(f"[{dt.datetime.now()}] How many messages you want to send:"))
         
         for num in range(count):
             send_message(url=url , content=message)
@@ -64,17 +66,18 @@ def spam_webhook():# Spam the webhook
 
 def send_single_message():
     clear()
-    url = input("Enter the webhook url:") # get the webhook
+    url = input(f"[{dt.datetime.now()}] Enter the webhook url:") # get the webhook
     if is_webhook_url(url): # if it return true
          # continue until message is equal to q 
-        message = input("Enter your message:")
+        message = input(f"[{dt.datetime.now()}] Enter your message:")
         send_message(url=url , content=message) # sends the messsage to discord
         clear()   
         main() # after the loop ends will return you to the main menu
     else:
-        print("Not valid url")
+        print(f"[{dt.datetime.now()}] Not a valid url")
         sleep(2)
         send_single_message()
+
 
 def main():# Main Menu
     print( color.Fore.RED + """
@@ -95,13 +98,13 @@ __________________________________________
 |                                         |
 |1) Chat as a webhook                     |
 |2) Spam a webhook                        |
-|3) Send a single message                 |
+|3) Send a single message                 |                   
 |                                         |
 |_________________________________________|    
 
     """)
     global option
-    option = input( color.Fore.RED + "Choose a option:")
+    option = input( color.Fore.RED + f"[{dt.datetime.now()}] Choose a option:")
     
     clear()
     match option:
@@ -110,10 +113,12 @@ __________________________________________
             clear()
         case "2":
             spam_webhook()
+            clear()
         case "3":
             send_single_message()
+            clear()
         case _:
-            print("Not a valid option")
+            print(f"[{dt.datetime.now()}] Not a valid option")
             sleep(2)
             main()
     
