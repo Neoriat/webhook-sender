@@ -89,7 +89,6 @@ def send_single_message():
 
 
 def main():# Main Menu
-
     main_color_number = randint(1 , 7)
 
     main_color = None
@@ -109,6 +108,7 @@ def main():# Main Menu
             main_color = color.Fore.MAGENTA
 
     print(main_color + """
+
 
 __________________________________________                                   
 |                 .                       |
