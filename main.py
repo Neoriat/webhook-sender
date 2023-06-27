@@ -91,7 +91,7 @@ def send_single_message():
 def main():# Main Menu
     main_color_number = randint(1 , 7)
 
-    main_color = None
+    main_color = color.Fore.BLACK
 
     match main_color_number:
         case 1:
